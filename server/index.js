@@ -12,7 +12,10 @@ import salesRoutes from "./routes/sales.js"
 
 // data imports
 import User from './models/User.js'
-import { dataUser } from "./data/index.js"
+import Product from './models/Product.js';
+import Transaction from './models/Transaction.js';
+import ProductStat from './models/ProductStat.js';
+import { dataUser, dataProduct, dataProductStat, dataTransaction } from "./data/index.js"
 
 // Configuration
 dotenv.config()
@@ -31,13 +34,22 @@ app.use("/general", generalRoutes);
 app.use("/management", managementRoutes);
 app.use("/sales", salesRoutes);
 
-// Mongoose Setup
+/* MONGOOSE SETUP */
 const PORT = process.env.PORT || 9000;
-mongoose.connect(process.env.MONGO_URL, {
-  useNewUrlParser: true,
-}).then(() => {
-  app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
-  // // Only add data one time
-  // User.insertMany(dataUser);
+mongoose
+  .connect(process.env.MONGO_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
 
-}).catch((error) => console.log(`Error: ${error} did not connect`));
+    /* ONLY ADD DATA ONE TIME */
+    // AffiliateStat.insertMany(dataAffiliateStat);
+    // OverallStat.insertMany(dataOverallStat);
+    // Product.insertMany(dataProduct);
+    // ProductStat.insertMany(dataProductStat);
+    // Transaction.insertMany(dataTransaction);
+    // User.insertMany(dataUser);
+  })
+  .catch((error) => console.log(`${error} did not connect`));
